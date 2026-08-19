@@ -1,0 +1,16 @@
+BLINDPARTY AVATAR STUDIO — V1.1
+
+Le ZIP est le pack de l'application, mais une PWA doit être ouverte depuis une adresse HTTPS pour être installable.
+
+Procédure :
+1. Décompresse le ZIP.
+2. Publie le contenu du dossier sur un hébergement statique HTTPS.
+3. Ouvre l'adresse obtenue sur le smartphone.
+4. Appuie sur « Installer Avatar Studio ».
+5. Si le bouton n'est pas proposé, utilise le menu du navigateur puis « Ajouter à l'écran d'accueil ».
+
+Mises à jour :
+Le service worker est versionné. La V1.1 utilise le numéro 1.1.0. Les futures versions pourront être installées via le bouton « Vérifier la mise à jour ».
+
+Architecture :
+Avatar Studio reste indépendant de Lovable. Il servira à préparer les assets et le moteur, puis le configurateur final sera intégré dans BlindParty.

@@ -1,0 +1,11 @@
+{
+  "name": "BlindParty Avatar Studio",
+  "short_name": "Avatar Studio",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08070c",
+  "theme_color": "#100a16",
+  "lang": "fr",
+  "description": "Outil autonome de préparation des avatars BlindParty"
+}

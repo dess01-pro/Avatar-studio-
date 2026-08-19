@@ -1,0 +1,1 @@
+PWA V1 BlindParty Avatar Studio. Pour l'installation PWA, héberger le dossier en HTTPS puis ouvrir index.html via l'URL hébergée. Le bouton Installer utilise le mécanisme PWA du navigateur. Le bouton Mise à jour est prévu pour les futures versions du service worker.
