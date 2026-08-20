@@ -1,6 +1,33 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08070b"><link rel="manifest" href="manifest.webmanifest"><title>BlindParty Avatar Studio</title><style>*{box-sizing:border-box}body{margin:0;background:#08070b;color:#fff;font-family:system-ui;text-align:center}header{padding:22px}h1{margin:0}header span{background:#e71983;border-radius:8px;padding:4px 7px;font-size:13px}.wrap{max-width:850px;margin:auto;padding:0 14px 30px}.gender,.actions,.tabs{display:flex;gap:10px;margin:12px 0}.gender button,.actions button,.tabs button{flex:1;padding:14px;border-radius:16px;border:1px solid #342c40;background:#15111c;color:#fff;font-weight:700}.active{background:#e71983!important}.stage{position:relative;aspect-ratio:736/912;border:1px solid #342c40;border-radius:28px;overflow:hidden;background:radial-gradient(circle,#271034,#0a080e 70%);max-height:72vh}.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.tabs{overflow:auto}.tabs button{white-space:nowrap}.panel{padding:14px;background:#0e0b13;border:1px solid #342c40;border-radius:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.item{background:#15111c;color:#fff;border:1px solid #342c40;border-radius:14px;padding:7px}.item img{width:100%;aspect-ratio:1;object-fit:contain;background:#211b29;border-radius:9px}.item small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}</style></head><body><header><h1>AVATAR STUDIO <span>V2</span></h1><div>Base vierge • vrais calques PNG • prêt pour BlindParty</div></header><div class="wrap"><div class="gender"><button id="m" class="active">♂ Masculin</button><button id="f">♀ Féminin</button></div><div id="stage" class="stage"></div><p>Les PNG transparents sont superposés au personnage de base.</p><div class="actions"><button id="reset">↻ Réinitialiser</button><button id="export">⇩ Exporter</button></div><div id="tabs" class="tabs"></div><div class="panel"><h2 id="title">Cheveux</h2><div id="status">Chargement…</div><div id="grid" class="grid"></div></div></div><script>
 const cats=["cheveux","yeux","sourcils","bouches","vetements","mains","accessoires"];let gender="masculin",sel={};
-function render(){let s=document.querySelector("#stage");s.innerHTML="";let b=new Image();b.src=gender==="masculin"?"personnage_masculin.png":"personnage_feminin.png";b.onerror=()=>b.src=gender==="masculin"?"assets/bases/personnage_masculin.png":"assets/bases/personnage_feminin.png";s.appendChild(b);Object.values(sel).forEach(u=>{let i=new Image();i.src=u;s.appendChild(i)})}
+function render(){
+  let s=document.querySelector("#stage");
+  s.innerHTML="";
+
+  let b=document.createElement("img");
+
+  if(gender==="masculin"){
+    b.src="assets/bases/personnage_masculin.png";
+  }else{
+    b.src="assets/bases/personnage_feminin.png";
+  }
+
+  b.onerror=function(){
+    document.querySelector("#status").textContent="Erreur : image introuvable";
+  };
+
+  b.onload=function(){
+    document.querySelector("#status").textContent="Personnage chargé";
+  };
+
+  s.appendChild(b);
+
+  Object.values(sel).forEach(u=>{
+    let n=new Image();
+    n.src=u;
+    s.appendChild(n);
+  });
+}
 async function load(cat){document.querySelector("#title").textContent=cat;let g=document.querySelector("#grid");g.innerHTML="";try{let d=await fetch("assets/catalog.json?"+Date.now()).then(r=>r.json()),fs=d[cat]||[];document.querySelector("#status").textContent=fs.length+" calque(s)";fs.forEach(f=>{let q=document.createElement("button");q.className="item";let i=new Image();i.src="assets/"+cat+"/"+f;q.appendChild(i);let t=document.createElement("small");t.textContent=f;q.appendChild(t);q.onclick=()=>{sel[cat]="assets/"+cat+"/"+f;render()};g.appendChild(q)})}catch(e){document.querySelector("#status").textContent="Catalogue introuvable"}}
 cats.forEach((c,n)=>{let b=document.createElement("button");b.textContent=c;if(!n)b.className="active";b.onclick=()=>{document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");load(c)};document.querySelector("#tabs").appendChild(b)});
 m.onclick=()=>{gender="masculin";sel={};render()};f.onclick=()=>{gender="feminin";sel={};render()};reset.onclick=()=>{sel={};render()};
