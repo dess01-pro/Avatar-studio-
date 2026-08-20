@@ -1,5 +1,5 @@
-const CACHE_NAME = "avatar-studio-v1";
-const APP_SHELL = ["./", "./index.html", "./manifest.json"];
+const CACHE_NAME = "avatar-studio-v2";
+const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
