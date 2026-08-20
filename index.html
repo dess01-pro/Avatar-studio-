@@ -92,7 +92,12 @@ function image(src){
 function render(){
   stage.innerHTML = "";
 
-  const base = image(gender === "masculin" ? BASE_MALE : BASE_FEMALE);
+  /* Base du personnage */
+  const base = image(
+    gender === "masculin"
+      ? BASE_MALE
+      : BASE_FEMALE
+  );
 
   base.onload = function(){
     status.textContent = "Personnage chargé.";
@@ -104,9 +109,38 @@ function render(){
 
   stage.appendChild(base);
 
+  /*
+   * Sous-vêtements :
+   * affichés uniquement lorsqu'aucun vêtement
+   * n'est actuellement sélectionné.
+   */
+  if(!selected.vetements){
+
+    const underwear = image(
+      gender === "masculin"
+        ? UNDERWEAR_MALE
+        : UNDERWEAR_FEMALE
+    );
+
+    stage.appendChild(underwear);
+  }
+
+  /*
+   * Autres calques sélectionnés.
+   * Le calque "vetements" est ajouté normalement
+   * seulement lorsqu'un vêtement a été choisi.
+   */
   for(const cat of categories){
+
+    if(cat === "vetements" && !selected.vetements){
+      continue;
+    }
+
     if(selected[cat]){
-      const layer = image("assets/" + cat + "/" + selected[cat]);
+      const layer = image(
+        "assets/" + cat + "/" + selected[cat]
+      );
+
       stage.appendChild(layer);
     }
   }
@@ -186,20 +220,25 @@ fetch("assets/catalog.json", {cache:"no-store"})
 
 male.onclick = function(){
   gender = "masculin";
+
+  /* On retire le vêtement de l'autre personnage */
+  delete selected.vetements;
+
   male.classList.add("active");
   female.classList.remove("active");
+
   render();
 };
 
 female.onclick = function(){
   gender = "feminin";
+
+  /* On retire le vêtement de l'autre personnage */
+  delete selected.vetements;
+
   female.classList.add("active");
   male.classList.remove("active");
-  render();
-};
 
-document.getElementById("reset").onclick = function(){
-  selected = {};
   render();
 };
 
