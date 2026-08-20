@@ -1,34 +1,66 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08070b"><link rel="manifest" href="manifest.webmanifest"><title>BlindParty Avatar Studio</title><style>*{box-sizing:border-box}body{margin:0;background:#08070b;color:#fff;font-family:system-ui;text-align:center}header{padding:22px}h1{margin:0}header span{background:#e71983;border-radius:8px;padding:4px 7px;font-size:13px}.wrap{max-width:850px;margin:auto;padding:0 14px 30px}.gender,.actions,.tabs{display:flex;gap:10px;margin:12px 0}.gender button,.actions button,.tabs button{flex:1;padding:14px;border-radius:16px;border:1px solid #342c40;background:#15111c;color:#fff;font-weight:700}.active{background:#e71983!important}.stage{position:relative;aspect-ratio:736/912;border:1px solid #342c40;border-radius:28px;overflow:hidden;background:radial-gradient(circle,#271034,#0a080e 70%);max-height:72vh}.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.tabs{overflow:auto}.tabs button{white-space:nowrap}.panel{padding:14px;background:#0e0b13;border:1px solid #342c40;border-radius:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.item{background:#15111c;color:#fff;border:1px solid #342c40;border-radius:14px;padding:7px}.item img{width:100%;aspect-ratio:1;object-fit:contain;background:#211b29;border-radius:9px}.item small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}</style></head><body><header><h1>AVATAR STUDIO <span>V2</span></h1><div>Base vierge • vrais calques PNG • prêt pour BlindParty</div></header><div class="wrap"><div class="gender"><button id="m" class="active">♂ Masculin</button><button id="f">♀ Féminin</button></div><div id="stage" class="stage"></div><p>Les PNG transparents sont superposés au personnage de base.</p><div class="actions"><button id="reset">↻ Réinitialiser</button><button id="export">⇩ Exporter</button></div><div id="tabs" class="tabs"></div><div class="panel"><h2 id="title">Cheveux</h2><div id="status">Chargement…</div><div id="grid" class="grid"></div></div></div><script>
-const cats=["cheveux","yeux","sourcils","bouches","vetements","mains","accessoires"];let gender="masculin",sel={};
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08070b">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Avatar Studio V2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08070b;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;text-align:center;padding:22px}
+h1{margin:0;font-size:32px}header{max-width:850px;margin:auto;padding-bottom:18px}header span{background:#e71983;border-radius:8px;padding:4px 7px;font-size:13px}.sub{opacity:.9;margin-top:6px}
+.render,.actions,.tabs{max-width:850px;margin:12px auto}.render{display:flex;gap:10px}
+button{border:1px solid #342c40;background:#15111c;color:#fff;font-weight:700;border-radius:16px;padding:14px;cursor:pointer}.render button{flex:1;font-size:16px}button.active{background:#e71983!important}
+.stage{position:relative;aspect-ratio:736/912;border:1px solid #342c40;border-radius:28px;overflow:hidden;background:radial-gradient(circle,#271034,#08070b 70%);max-width:850px;margin:auto}.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.status{min-height:24px;margin:12px 0;opacity:.85}.actions{display:flex;gap:10px}.actions button{flex:1}.tabs{display:flex;gap:8px;overflow:auto}.tabs button{white-space:nowrap}
+.panel{max-width:850px;margin:12px auto;padding:14px;background:#0e0b13;border:1px solid #342c40;border-radius:22px;text-align:left}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.item{background:#15111c;color:#fff;border:1px solid #342c40;border-radius:14px;padding:8px;overflow:hidden;text-align:center}.item img{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#211b29;border-radius:9px}.item small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:6px}.error{color:#ff9dbf}
+@media(max-width:600px){body{padding:14px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header><h1>AVATAR STUDIO <span>V2</span></h1><div class="sub">Base vierge • vrais calques PNG • prêt pour BlindParty</div></header>
+<div class="render"><button id="male" class="active">♂ Masculin</button><button id="female">♀ Féminin</button></div>
+<div id="stage" class="stage"></div><div class="status" id="status">Chargement du personnage…</div>
+<div class="actions"><button id="reset">↻ Réinitialiser</button><button id="export">⇩ Exporter</button></div>
+<div id="tabs" class="tabs"></div><div id="panel" class="panel"><h2 id="title">Cheveux</h2><div id="grid" class="grid"></div></div>
+<script>
+const categories=["cheveux","yeux","sourcils","bouches","vetements","mains","accessoires"];
+let gender="masculin"; const selected={};
+const stage=document.getElementById("stage"),status=document.getElementById("status"),grid=document.getElementById("grid"),title=document.getElementById("title"),tabs=document.getElementById("tabs");
+function addImg(src){const i=new Image();i.alt="";i.src=src;return i}
+function basePath(){return gender==="masculin"?"assets/bases/personnage_masculin.png":"assets/bases/personnage_feminin.png"}
 function render(){
-  let s=document.querySelector("#stage");
-  s.innerHTML="";
-
-  let b=document.createElement("img");
-
-  if(gender==="masculin"){
-    b.src="assets/bases/personnage_masculin.png";
-  }else{
-    b.src="assets/bases/personnage_feminin.png";
-  }
-
-  b.onerror=function(){
-    document.querySelector("#status").textContent="Erreur : image introuvable";
-  };
-
-  b.onload=function(){
-    document.querySelector("#status").textContent="Personnage chargé";
-  };
-
-  s.appendChild(b);
-
-  Object.values(sel).forEach(u=>{
-    let n=new Image();
-    n.src=u;
-    s.appendChild(n);
-  });
+ stage.innerHTML=""; const base=addImg(basePath());
+ base.onload=()=>status.textContent="Personnage chargé."; base.onerror=()=>status.innerHTML='<span class="error">Base introuvable : '+basePath()+"</span>";
+ stage.appendChild(base);
+ for(const cat of categories) if(selected[cat]) stage.appendChild(addImg("assets/"+cat+"/"+selected[cat]));
 }
-async function load(cat){document.querySelector("#title").textContent=cat;let g=document.querySelector("#grid");g.innerHTML="";try{let d=await fetch("assets/catalog.json?"+Date.now()).then(r=>r.json()),fs=d[cat]||[];document.querySelector("#status").textContent=fs.length+" calque(s)";fs.forEach(f=>{let q=document.createElement("button");q.className="item";let i=new Image();i.src="assets/"+cat+"/"+f;q.appendChild(i);let t=document.createElement("small");t.textContent=f;q.appendChild(t);q.onclick=()=>{sel[cat]="assets/"+cat+"/"+f;render()};g.appendChild(q)})}catch(e){document.querySelector("#status").textContent="Catalogue introuvable"}}
-cats.forEach((c,n)=>{let b=document.createElement("button");b.textContent=c;if(!n)b.className="active";b.onclick=()=>{document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");load(c)};document.querySelector("#tabs").appendChild(b)});
-m.onclick=()=>{gender="masculin";sel={};render()};f.onclick=()=>{gender="feminin";sel={};render()};reset.onclick=()=>{sel={};render()};
-export.onclick=()=>{let imgs=[...document.querySelectorAll("#stage img")],c=document.createElement("canvas");c.width=736;c.height=912;let x=c.getContext("2d"),n=0;function d(){if(n==imgs.length){let a=document.createElement("a");a.download="avatar.png";a.href=c.toDataURL();a.click();return}let z=new Image();z.onload=()=>{x.drawImage(z,0,0,736,912);n++;d()};z.src=imgs[n].src}d()};render();load("cheveux");if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");</script></body></html>
+async function loadCatalog(){
+ try{
+  const r=await fetch("assets/catalog.json?"+Date.now(),{cache:"no-store"}); if(!r.ok) throw Error(r.status);
+  const data=await r.json(); window.catalog=data.categories||data.catalog||data;
+  tabs.innerHTML=""; categories.forEach((cat,i)=>{const b=document.createElement("button");b.textContent=cat;b.onclick=()=>showCategory(cat);tabs.appendChild(b);if(i===0)showCategory(cat)});
+  status.textContent="Personnage chargé • catalogue disponible.";
+ }catch(e){
+  status.innerHTML='<span class="error">Personnage chargé, mais catalogue.json est introuvable ou invalide.</span>';
+  tabs.innerHTML=""; categories.forEach(cat=>{const b=document.createElement("button");b.textContent=cat;b.onclick=()=>showCategory(cat);tabs.appendChild(b)});showCategory(categories[0]);
+ }
+}
+function getItems(cat){
+ const c=window.catalog||{}; let v=c[cat]??c[cat+"s"]??[];
+ if(!Array.isArray(v)) v=v.items||v.files||v.assets||[];
+ return v.map(x=>typeof x==="string"?{file:x,name:x}:{file:x.file||x.filename||x.src||x.path||x.name||"",name:x.label||x.title||x.name||x.file||""}).filter(x=>x.file);
+}
+function showCategory(cat){
+ title.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);grid.innerHTML="";const items=getItems(cat);
+ if(!items.length){grid.innerHTML='<div class="status">Aucun élément trouvé dans cette catégorie.</div>';return}
+ items.forEach(item=>{const b=document.createElement("button");b.className="item";const img=addImg("assets/"+cat+"/"+item.file);b.appendChild(img);const s=document.createElement("small");s.textContent=item.name;b.appendChild(s);b.onclick=()=>{selected[cat]=item.file;render()};grid.appendChild(b)})
+}
+male.onclick=()=>{gender="masculin";male.classList.add("active");female.classList.remove("active");render()};
+female.onclick=()=>{gender="feminin";female.classList.add("active");male.classList.remove("active");render()};
+reset.onclick=()=>{categories.forEach(k=>delete selected[k]);render()};
+export.onclick=()=>{const c=document.createElement("canvas");c.width=736;c.height=912;const x=c.getContext("2d"),imgs=[...stage.querySelectorAll("img")];let n=imgs.length;imgs.forEach(i=>{const d=()=>{x.drawImage(i,0,0,736,912);if(--n===0){const a=document.createElement("a");a.download="avatar.png";a.href=c.toDataURL("image/png");a.click()}};i.complete?d():i.onload=d})};
+render();loadCatalog();
+</script>
+</body></html>
