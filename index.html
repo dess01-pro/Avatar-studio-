@@ -116,11 +116,14 @@ function render(){
    */
   if(!selected.vetements){
 
-    const underwear = image(
-      gender === "masculin"
-        ? UNDERWEAR_MALE
-        : UNDERWEAR_FEMALE
-    );
+      const underwear = image(
+    gender === "masculin"
+    ? UNDERWEAR_MALE
+    : UNDERWEAR_FEMALE
+);
+
+underwear.className = "underwear-layer";
+  
 
     stage.appendChild(underwear);
   }
