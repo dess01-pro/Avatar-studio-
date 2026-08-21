@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08070b">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Avatar Studio V2</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#08070b;color:#fff;font-family:system-ui,sans-serif;text-align:center;padding:22px}
+header{max-width:850px;margin:auto}
+h1{margin:0;font-size:32px}
+h1 span{background:#e71983;border-radius:8px;padding:4px 7px;font-size:13px}
+.sub{margin-top:6px}
+.render,.actions,.tabs{max-width:850px;margin:12px auto;display:flex;gap:10px}
+button{border:1px solid #342c40;background:#15111c;color:#fff;font-weight:700;border-radius:16px;padding:14px;cursor:pointer}
+.render button,.actions button{flex:1;font-size:16px}
+button.active{background:#e71983}
+.stage{position:relative;aspect-ratio:736/912;max-width:850px;margin:auto;border:1px solid #342c40;border-radius:28px;overflow:hidden;background:#08070b}
+/* Réglages des calques : les valeurs X/Y sont en pixels sur une base 736×912 */
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform-origin:0 0;will-change:transform}
+.status{min-height:25px;margin:12px 0}
+.tabs{overflow:auto}
+.tabs button{white-space:nowrap}
+.panel{max-width:850px;margin:12px auto;padding:14px;background:#0e0b13;border:1px solid #342c40;border-radius:22px;text-align:left}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.item{padding:8px;text-align:center}
+.item img{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#211b29;border-radius:9px}
+.item small{display:block;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.error{color:#ff9dbf}
+@media(max-width:600px){body{padding:14px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>AVATAR STUDIO <span>V2</span></h1>
+<div class="sub">Base vierge • vrais calques PNG • prêt pour BlindParty</div>
+</header>
+
+<div class="render">
+<button id="male" class="active">♂ Masculin</button>
+<button id="female">♀ Féminin</button>
+</div>
+
+<div id="stage" class="stage"></div>
+<div id="status" class="status">Chargement du personnage…</div>
+
+<div class="actions">
+<button id="reset">↻ Réinitialiser</button>
+<button id="export">⇩ Exporter</button>
+</div>
+
+<div id="tabs" class="tabs"></div>
+
+<div class="panel">
+<h2 id="title">Cheveux</h2>
+<div id="grid" class="grid"></div>
+</div>
+
+<script>
+const BASE_MALE = "assets/bases/personnage_masculin.png";
+const BASE_FEMALE = "assets/bases/personnage_feminin.png";
+
+const UNDERWEAR_MALE = "assets/sous_vetements/sous_vetements_masculin.png";
+const UNDERWEAR_FEMALE = "assets/sous_vetements/sous_vetements_feminin.png"; 
+  
+const categories = [
+  "cheveux","yeux","sourcils","bouches",
+  "vetements","mains","accessoires"
+];
+
+/*
+ * CALIBRATION DES CALQUES
+ * -----------------------
+ * X = déplacement horizontal (+ vers la droite / - vers la gauche)
+ * Y = déplacement vertical (+ vers le bas / - vers le haut)
+ * scale = échelle (1 = taille normale, 1.05 = +5%, 0.95 = -5%)
+ *
+ * Les valeurs X/Y correspondent à une image de référence 736×912.
+ * Commence par régler ici les calques qui ne sont pas parfaitement alignés.
+ */
+const LAYER_SETTINGS = {
+  base:       {x:0, y:0, scale:1},
+  underwear:  {x:0, y:0, scale:1},
+  cheveux:    {x:0, y:0, scale:1},
+  yeux:       {x:0, y:0, scale:1},
+  sourcils:   {x:0, y:0, scale:1},
+  bouches:    {x:0, y:0, scale:1},
+  vetements:  {x:0, y:0, scale:1},
+  mains:      {x:0, y:0, scale:1},
+  accessoires:{x:0, y:0, scale:1}
+};
+
+let gender = "masculin";
+let selected = {};
+let catalog = {};
+
+const stage = document.getElementById("stage");
+const status = document.getElementById("status");
+const grid = document.getElementById("grid");
+const title = document.getElementById("title");
+const tabs = document.getElementById("tabs");
+const male = document.getElementById("male");
+const female = document.getElementById("female");
+
+function image(src){
+  const img = document.createElement("img");
+  img.src = src;
+  return img;
+}
+
+/* Applique le réglage d'un calque en tenant compte de la taille réelle du stage. */
+function applyLayerSettings(img, key){
+  const s = LAYER_SETTINGS[key] || LAYER_SETTINGS.base;
+  const ratio = stage.clientWidth / 736;
+
+  img.dataset.layer = key;
+  img.style.transform =
+    `translate(${s.x * ratio}px, ${s.y * ratio}px) scale(${s.scale})`;
+}
+
+/* Réapplique les positions lorsque l'écran change de taille. */
+function refreshLayerTransforms(){
+  stage.querySelectorAll("img[data-layer]").forEach(img => {
+    applyLayerSettings(img, img.dataset.layer);
+  });
+}
+
+/* CHARGE DIRECTEMENT LA BASE : pas de fetch, pas de délai */
+function render(){
+  stage.innerHTML = "";
+
+  /* Base du personnage */
+  const base = image(
+    gender === "masculin"
+      ? BASE_MALE
+      : BASE_FEMALE
+  );
+
+  base.onload = function(){
+    status.textContent = "Personnage chargé.";
+  };
+
+  base.onerror = function(){
+    status.textContent = "Erreur : impossible de charger la base.";
+  };
+
+  applyLayerSettings(base, "base");
+  stage.appendChild(base);
+
+  /*
+   * Sous-vêtements :
+   * affichés uniquement lorsqu'aucun vêtement
+   * n'est actuellement sélectionné.
+   */
+  if(!selected.vetements){
+
+      const underwear = image(
+    gender === "masculin"
+    ? UNDERWEAR_MALE
+    : UNDERWEAR_FEMALE
+);
+
+underwear.className = "underwear-layer";
+  
+
+    stage.appendChild(underwear);
+  }
+
+  /*
+   * Autres calques sélectionnés.
+   * Le calque "vetements" est ajouté normalement
+   * seulement lorsqu'un vêtement a été choisi.
+   */
+  for(const cat of categories){
+
+    if(cat === "vetements" && !selected.vetements){
+      continue;
+    }
+
+    if(selected[cat]){
+      const layer = image(
+        "assets/" + cat + "/" + selected[cat]
+      );
+
+      applyLayerSettings(layer, cat);
+      stage.appendChild(layer);
+    }
+  }
+}
+
+function showCategory(cat){
+  title.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+  grid.innerHTML = "";
+
+  let items = catalog[cat] || [];
+
+  if(!Array.isArray(items)){
+    items = items.items || items.files || [];
+  }
+
+  if(items.length === 0){
+    grid.innerHTML = "<div>Aucun élément dans cette catégorie.</div>";
+    return;
+  }
+
+  items.forEach(item => {
+    let file = typeof item === "string" ? item :
+      (item.file || item.filename || item.src || item.path || item.name || "");
+
+    let name = typeof item === "string" ? item :
+      (item.label || item.title || item.name || file);
+
+    if(!file) return;
+
+    const button = document.createElement("button");
+    button.className = "item";
+
+    const img = image("assets/" + cat + "/" + file);
+    const label = document.createElement("small");
+    label.textContent = name;
+
+    button.appendChild(img);
+    button.appendChild(label);
+
+    button.onclick = function(){
+      selected[cat] = file;
+      render();
+    };
+
+    grid.appendChild(button);
+  });
+}
+
+function buildTabs(){
+  tabs.innerHTML = "";
+
+  categories.forEach((cat,index) => {
+    const button = document.createElement("button");
+    button.textContent = cat;
+    button.onclick = () => showCategory(cat);
+    tabs.appendChild(button);
+
+    if(index === 0) showCategory(cat);
+  });
+}
+
+/* Le catalogue est optionnel : la base fonctionne même sans lui. */
+fetch("assets/catalog.json", {cache:"no-store"})
+  .then(r => {
+    if(!r.ok) throw new Error("catalogue absent");
+    return r.json();
+  })
+  .then(data => {
+    catalog = data.categories || data.catalog || data;
+    buildTabs();
+  })
+  .catch(() => {
+    catalog = {};
+    buildTabs();
+    status.textContent = "Personnage chargé. Catalogue à compléter.";
+  });
+
+male.onclick = function(){
+  gender = "masculin";
+
+  /* On retire le vêtement de l'autre personnage */
+  delete selected.vetements;
+
+  male.classList.add("active");
+  female.classList.remove("active");
+
+  render();
+};
+
+female.onclick = function(){
+  gender = "feminin";
+
+  /* On retire le vêtement de l'autre personnage */
+  delete selected.vetements;
+
+  female.classList.add("active");
+  male.classList.remove("active");
+
+  render();
+};
+
+document.getElementById("export").onclick = function(){
+  const canvas = document.createElement("canvas");
+  canvas.width = 736;
+  canvas.height = 912;
+  const ctx = canvas.getContext("2d");
+  const imgs = Array.from(stage.querySelectorAll("img"));
+
+  let remaining = imgs.length;
+
+  if(!remaining) return;
+
+  imgs.forEach(img => {
+    const draw = () => {
+      const key = img.dataset.layer || "base";
+      const s = LAYER_SETTINGS[key] || LAYER_SETTINGS.base;
+
+      /*
+       * Même transformation que dans le stage :
+       * l'export reste donc fidèle au positionnement/à l'échelle affichés.
+       */
+      ctx.drawImage(
+        img,
+        s.x,
+        s.y,
+        736 * s.scale,
+        912 * s.scale
+      );
+      remaining--;
+
+      if(remaining === 0){
+        const a = document.createElement("a");
+        a.download = "avatar.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      }
+    };
+
+    if(img.complete) draw();
+    else img.onload = draw;
+  });
+};
+
+/* Affiche immédiatement la base */
+render();
+
+window.addEventListener("resize", refreshLayerTransforms);
+
+/* Service Worker */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .catch(err => console.error("Service Worker:", err));
+  });
+}
+</script>
+
+</body>
+</html>
