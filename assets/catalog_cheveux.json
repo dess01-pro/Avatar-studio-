@@ -1,0 +1,346 @@
+{
+  "categories": {
+    "cheveux": {
+      "masculin": [
+        {
+          "file": "H1_court_classique_noir.png",
+          "label": "Court Classique — Noir"
+        },
+        {
+          "file": "H1_court_classique_brun.png",
+          "label": "Court Classique — Brun"
+        },
+        {
+          "file": "H1_court_classique_chatain.png",
+          "label": "Court Classique — Châtain"
+        },
+        {
+          "file": "H1_court_classique_blond.png",
+          "label": "Court Classique — Blond"
+        },
+        {
+          "file": "H1_court_classique_roux.png",
+          "label": "Court Classique — Roux"
+        },
+        {
+          "file": "H1_court_classique_rose.png",
+          "label": "Court Classique — Rose"
+        },
+        {
+          "file": "H2_degrade_texture_noir.png",
+          "label": "Dégradé Texturé — Noir"
+        },
+        {
+          "file": "H2_degrade_texture_brun.png",
+          "label": "Dégradé Texturé — Brun"
+        },
+        {
+          "file": "H2_degrade_texture_chatain.png",
+          "label": "Dégradé Texturé — Châtain"
+        },
+        {
+          "file": "H2_degrade_texture_blond.png",
+          "label": "Dégradé Texturé — Blond"
+        },
+        {
+          "file": "H2_degrade_texture_roux.png",
+          "label": "Dégradé Texturé — Roux"
+        },
+        {
+          "file": "H2_degrade_texture_rose.png",
+          "label": "Dégradé Texturé — Rose"
+        },
+        {
+          "file": "H3_undercut_rebelle_noir.png",
+          "label": "Undercut Rebelle — Noir"
+        },
+        {
+          "file": "H3_undercut_rebelle_brun.png",
+          "label": "Undercut Rebelle — Brun"
+        },
+        {
+          "file": "H3_undercut_rebelle_chatain.png",
+          "label": "Undercut Rebelle — Châtain"
+        },
+        {
+          "file": "H3_undercut_rebelle_blond.png",
+          "label": "Undercut Rebelle — Blond"
+        },
+        {
+          "file": "H3_undercut_rebelle_roux.png",
+          "label": "Undercut Rebelle — Roux"
+        },
+        {
+          "file": "H3_undercut_rebelle_rose.png",
+          "label": "Undercut Rebelle — Rose"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_noir.png",
+          "label": "Undercut Rebelle — variante — Noir"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_brun.png",
+          "label": "Undercut Rebelle — variante — Brun"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_chatain.png",
+          "label": "Undercut Rebelle — variante — Châtain"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_blond.png",
+          "label": "Undercut Rebelle — variante — Blond"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_roux.png",
+          "label": "Undercut Rebelle — variante — Roux"
+        },
+        {
+          "file": "H3v2_undercut_rebelle_v2_rose.png",
+          "label": "Undercut Rebelle — variante — Rose"
+        },
+        {
+          "file": "H4_und_longs_plaques_noir.png",
+          "label": "Und-longs Plaqués — Noir"
+        },
+        {
+          "file": "H4_und_longs_plaques_brun.png",
+          "label": "Und-longs Plaqués — Brun"
+        },
+        {
+          "file": "H4_und_longs_plaques_chatain.png",
+          "label": "Und-longs Plaqués — Châtain"
+        },
+        {
+          "file": "H4_und_longs_plaques_blond.png",
+          "label": "Und-longs Plaqués — Blond"
+        },
+        {
+          "file": "H4_und_longs_plaques_roux.png",
+          "label": "Und-longs Plaqués — Roux"
+        },
+        {
+          "file": "H4_und_longs_plaques_rose.png",
+          "label": "Und-longs Plaqués — Rose"
+        },
+        {
+          "file": "H6_spiky_dynamique_noir.png",
+          "label": "Spiky Dynamique — Noir"
+        },
+        {
+          "file": "H6_spiky_dynamique_brun.png",
+          "label": "Spiky Dynamique — Brun"
+        },
+        {
+          "file": "H6_spiky_dynamique_chatain.png",
+          "label": "Spiky Dynamique — Châtain"
+        },
+        {
+          "file": "H6_spiky_dynamique_blond.png",
+          "label": "Spiky Dynamique — Blond"
+        },
+        {
+          "file": "H6_spiky_dynamique_roux.png",
+          "label": "Spiky Dynamique — Roux"
+        },
+        {
+          "file": "H6_spiky_dynamique_rose.png",
+          "label": "Spiky Dynamique — Rose"
+        }
+      ],
+      "feminin": [
+        {
+          "file": "F1_carre_classique_noir.png",
+          "label": "Carré Classique — Noir"
+        },
+        {
+          "file": "F1_carre_classique_brun.png",
+          "label": "Carré Classique — Brun"
+        },
+        {
+          "file": "F1_carre_classique_chatain.png",
+          "label": "Carré Classique — Châtain"
+        },
+        {
+          "file": "F1_carre_classique_blond.png",
+          "label": "Carré Classique — Blond"
+        },
+        {
+          "file": "F1_carre_classique_roux.png",
+          "label": "Carré Classique — Roux"
+        },
+        {
+          "file": "F1_carre_classique_rose.png",
+          "label": "Carré Classique — Rose"
+        },
+        {
+          "file": "F2_carre_long_ondule_noir.png",
+          "label": "Carré Long Ondulé — Noir"
+        },
+        {
+          "file": "F2_carre_long_ondule_brun.png",
+          "label": "Carré Long Ondulé — Brun"
+        },
+        {
+          "file": "F2_carre_long_ondule_chatain.png",
+          "label": "Carré Long Ondulé — Châtain"
+        },
+        {
+          "file": "F2_carre_long_ondule_blond.png",
+          "label": "Carré Long Ondulé — Blond"
+        },
+        {
+          "file": "F2_carre_long_ondule_roux.png",
+          "label": "Carré Long Ondulé — Roux"
+        },
+        {
+          "file": "F2_carre_long_ondule_rose.png",
+          "label": "Carré Long Ondulé — Rose"
+        },
+        {
+          "file": "F3_longs_ondules_noir.png",
+          "label": "Longs Ondulés — Noir"
+        },
+        {
+          "file": "F3_longs_ondules_brun.png",
+          "label": "Longs Ondulés — Brun"
+        },
+        {
+          "file": "F3_longs_ondules_chatain.png",
+          "label": "Longs Ondulés — Châtain"
+        },
+        {
+          "file": "F3_longs_ondules_blond.png",
+          "label": "Longs Ondulés — Blond"
+        },
+        {
+          "file": "F3_longs_ondules_roux.png",
+          "label": "Longs Ondulés — Roux"
+        },
+        {
+          "file": "F3_longs_ondules_rose.png",
+          "label": "Longs Ondulés — Rose"
+        },
+        {
+          "file": "F4_queue_cheval_haute_noir.png",
+          "label": "Queue de cheval Haute — Noir"
+        },
+        {
+          "file": "F4_queue_cheval_haute_brun.png",
+          "label": "Queue de cheval Haute — Brun"
+        },
+        {
+          "file": "F4_queue_cheval_haute_chatain.png",
+          "label": "Queue de cheval Haute — Châtain"
+        },
+        {
+          "file": "F4_queue_cheval_haute_blond.png",
+          "label": "Queue de cheval Haute — Blond"
+        },
+        {
+          "file": "F4_queue_cheval_haute_roux.png",
+          "label": "Queue de cheval Haute — Roux"
+        },
+        {
+          "file": "F4_queue_cheval_haute_rose.png",
+          "label": "Queue de cheval Haute — Rose"
+        },
+        {
+          "file": "F5_double_couette_noir.png",
+          "label": "Double couette — Noir"
+        },
+        {
+          "file": "F5_double_couette_brun.png",
+          "label": "Double couette — Brun"
+        },
+        {
+          "file": "F5_double_couette_chatain.png",
+          "label": "Double couette — Châtain"
+        },
+        {
+          "file": "F5_double_couette_blond.png",
+          "label": "Double couette — Blond"
+        },
+        {
+          "file": "F5_double_couette_roux.png",
+          "label": "Double couette — Roux"
+        },
+        {
+          "file": "F5_double_couette_rose.png",
+          "label": "Double couette — Rose"
+        },
+        {
+          "file": "F6_frange_longs_lisses_noir.png",
+          "label": "Frange + Longs Lissés — Noir"
+        },
+        {
+          "file": "F6_frange_longs_lisses_brun.png",
+          "label": "Frange + Longs Lissés — Brun"
+        },
+        {
+          "file": "F6_frange_longs_lisses_chatain.png",
+          "label": "Frange + Longs Lissés — Châtain"
+        },
+        {
+          "file": "F6_frange_longs_lisses_blond.png",
+          "label": "Frange + Longs Lissés — Blond"
+        },
+        {
+          "file": "F6_frange_longs_lisses_roux.png",
+          "label": "Frange + Longs Lissés — Roux"
+        },
+        {
+          "file": "F6_frange_longs_lisses_rose.png",
+          "label": "Frange + Longs Lissés — Rose"
+        },
+        {
+          "file": "F7_chignon_messy_noir.png",
+          "label": "Chignon Messy — Noir"
+        },
+        {
+          "file": "F7_chignon_messy_brun.png",
+          "label": "Chignon Messy — Brun"
+        },
+        {
+          "file": "F7_chignon_messy_chatain.png",
+          "label": "Chignon Messy — Châtain"
+        },
+        {
+          "file": "F7_chignon_messy_blond.png",
+          "label": "Chignon Messy — Blond"
+        },
+        {
+          "file": "F7_chignon_messy_roux.png",
+          "label": "Chignon Messy — Roux"
+        },
+        {
+          "file": "F7_chignon_messy_rose.png",
+          "label": "Chignon Messy — Rose"
+        },
+        {
+          "file": "F8_tresse_cote_noir.png",
+          "label": "Tresse Côté — Noir"
+        },
+        {
+          "file": "F8_tresse_cote_brun.png",
+          "label": "Tresse Côté — Brun"
+        },
+        {
+          "file": "F8_tresse_cote_chatain.png",
+          "label": "Tresse Côté — Châtain"
+        },
+        {
+          "file": "F8_tresse_cote_blond.png",
+          "label": "Tresse Côté — Blond"
+        },
+        {
+          "file": "F8_tresse_cote_roux.png",
+          "label": "Tresse Côté — Roux"
+        },
+        {
+          "file": "F8_tresse_cote_rose.png",
+          "label": "Tresse Côté — Rose"
+        }
+      ]
+    }
+  }
+}
